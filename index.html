@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Freelance Strategy for Marketers</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Custom Chart Container Styling */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #fdfbf7; /* Warm neutral background */
+            color: #333;
+        }
+        .card {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            transition: transform 0.2s ease-in-out;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+        }
+        .nav-active {
+            border-bottom: 2px solid #0f766e; /* Teal-700 */
+            color: #0f766e;
+            font-weight: 600;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background: #0f766e;
+            cursor: pointer;
+            margin-top: -6px;
+        }
+        input[type="range"]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: #ccfbf1;
+            border-radius: 2px;
+        }
+    </style>
+    <!-- Chosen Palette: Warm Neutral Background (#fdfbf7) with Teal (#0f766e) and Slate accents for a professional, data-driven look. -->
+    <!-- Application Structure Plan: 
+         1. Hero: Immediate value prop.
+         2. Strategic Analysis (Dashboard): Interactive Scatter Plot (Skill Suitability) & Bar Chart (Success Factors) to visually validate the user's path.
+         3. Platform Tactics: Interactive comparison cards and checklist for Upwork/LinkedIn.
+         4. Communication Toolkit: Toggle-based "Script Builder" for non-native speakers.
+         5. Income Simulator: Interactive calculator to show ROI.
+         Rationale: This flow moves from "Mindset/Strategy" -> "Tactics/Execution" -> "Motivation/Results".
+    -->
+    <!-- Visualization & Content Choices:
+         1. Scatter Plot: Goals: Position "Ads/Data" as high-value/low-verbal. Justification: Visualizes the "Sweet Spot" instantly. Library: Chart.js.
+         2. Bar Chart: Goal: Show what clients actually value (Results > English). Justification: Reduces anxiety about language skills. Library: Chart.js.
+         3. Income Calculator: Goal: Motivation. Interaction: Sliders for rate/hours. Justification: Demonstrates the power of currency arbitrage. Method: Vanilla JS DOM manipulation.
+         4. Checklist: Goal: Actionable next steps. Method: JS State toggle.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="bg-stone-50 text-slate-800">
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-stone-200">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <span class="text-xl font-bold text-teal-800">Global Marketer Blueprint 🇯🇵</span>
+                </div>
+                <div class="flex space-x-8 items-center hidden md:flex">
+                    <button onclick="scrollToSection('strategy')" class="nav-item text-slate-600 hover:text-teal-700 px-3 py-2 text-sm font-medium transition-colors">戦略マップ</button>
+                    <button onclick="scrollToSection('platforms')" class="nav-item text-slate-600 hover:text-teal-700 px-3 py-2 text-sm font-medium transition-colors">プラットフォーム</button>
+                    <button onclick="scrollToSection('communication')" class="nav-item text-slate-600 hover:text-teal-700 px-3 py-2 text-sm font-medium transition-colors">コミュニケーション</button>
+                    <button onclick="scrollToSection('simulation')" class="nav-item text-slate-600 hover:text-teal-700 px-3 py-2 text-sm font-medium transition-colors">収益シミュレーション</button>
+                </div>
+                <!-- Mobile menu button placeholder -->
+                <div class="flex items-center md:hidden">
+                    <span class="text-2xl text-teal-800">☰</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-16">
+
+        <!-- Hero Section -->
+        <section class="text-center py-12 bg-white rounded-3xl shadow-sm border border-stone-100">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-4">
+                英語力「日常会話レベル」からの<br>
+                <span class="text-teal-600">海外マーケティング案件</span>獲得戦略
+            </h1>
+            <p class="mt-4 max-w-2xl mx-auto text-lg text-slate-600">
+                あなたの「データ分析」「広告運用」スキルは、言葉の壁を超えます。
+                <br>日本のマーケットへの参入を目指す海外企業にとって、あなたは最強のパートナーです。
+            </p>
+            <div class="mt-8 flex justify-center gap-4">
+                <button onclick="scrollToSection('strategy')" class="bg-teal-700 hover:bg-teal-800 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-transform transform hover:scale-105">
+                    戦略を見る ⇩
+                </button>
+            </div>
+        </section>
+
+        <!-- SECTION 1: Strategic Analysis (Charts) -->
+        <section id="strategy" class="scroll-mt-24">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-slate-800 mb-2">1. 戦略的ポジショニング</h2>
+                <p class="text-slate-600">
+                    英語力が「ビジネスレベル」でなくとも、高単価案件は獲得可能です。重要なのは「言語依存度」が低く、「市場価値」が高い領域を狙うことです。あなたの得意分野であるWeb広告とデータ分析は、まさにその「スイートスポット」に位置しています。
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Scatter Plot Container -->
+                <div class="card p-6">
+                    <h3 class="text-lg font-semibold text-slate-700 mb-4 flex items-center">
+                        <span class="bg-teal-100 text-teal-800 text-xs px-2 py-1 rounded-full mr-2">分析</span>
+                        スキル別：英語依存度 vs 市場単価
+                    </h3>
+                    <div class="chart-container">
+                        <canvas id="skillMatrixChart"></canvas>
+                    </div>
+                    <p class="mt-4 text-sm text-slate-500 bg-stone-50 p-3 rounded">
+                        <strong>解説:</strong> コピーライティングやPRは高度な英語力が必須ですが、<span class="text-teal-700 font-bold">Web広告やデータ分析は「数字」が共通言語</span>となるため、比較的低い英語力でも高単価を狙えます。
+                    </p>
+                </div>
+
+                <!-- Bar Chart Container -->
+                <div class="card p-6">
+                    <h3 class="text-lg font-semibold text-slate-700 mb-4 flex items-center">
+                        <span class="bg-teal-100 text-teal-800 text-xs px-2 py-1 rounded-full mr-2">重要度</span>
+                        海外クライアントが重視する要素
+                    </h3>
+                    <div class="chart-container">
+                        <canvas id="clientPriorityChart"></canvas>
+                    </div>
+                    <p class="mt-4 text-sm text-slate-500 bg-stone-50 p-3 rounded">
+                        <strong>解説:</strong> クライアントは「流暢な英語」よりも<span class="text-teal-700 font-bold">「実務能力」と「日本市場への理解」</span>にお金を払います。完璧な英語を目指すより、ポートフォリオの充実が優先です。
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: Platform & Profile Strategy -->
+        <section id="platforms" class="scroll-mt-24">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-slate-800 mb-2">2. 獲得チャネルとプロフィール戦略</h2>
+                <p class="text-slate-600">
+                    待っているだけでは案件は来ません。しかし、闇雲に応募するのも非効率です。「日本市場へのゲートキーパー」としてプロフィールを最適化しましょう。
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                <!-- Upwork Card -->
+                <div class="card p-6 border-t-4 border-green-500">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-xl font-bold text-slate-800">Upwork</h3>
+                        <span class="text-2xl">⚡</span>
+                    </div>
+                    <p class="text-sm text-slate-600 mb-4 h-16">世界最大級のクラウドソーシング。短期プロジェクトから長期契約まで幅広い。</p>
+                    <ul class="text-sm space-y-2 mb-6 text-slate-600">
+                        <li class="flex items-start">✅ <span class="ml-2">案件数が圧倒的</span></li>
+                        <li class="flex items-start">✅ <span class="ml-2">支払い保証システムがあり安心</span></li>
+                        <li class="flex items-start">⚠️ <span class="ml-2">競争が激しい（提案力が鍵）</span></li>
+                    </ul>
+                    <button class="w-full py-2 bg-stone-100 hover:bg-stone-200 text-slate-700 rounded transition" onclick="showTip('upwork')">攻略のヒント</button>
+                </div>
+
+                <!-- LinkedIn Card -->
+                <div class="card p-6 border-t-4 border-blue-600">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-xl font-bold text-slate-800">LinkedIn</h3>
+                        <span class="text-2xl">👔</span>
+                    </div>
+                    <p class="text-sm text-slate-600 mb-4 h-16">ビジネス特化SNS。直接契約や長期のヘッドハンティングに繋がりやすい。</p>
+                    <ul class="text-sm space-y-2 mb-6 text-slate-600">
+                        <li class="flex items-start">✅ <span class="ml-2">高単価案件が多い</span></li>
+                        <li class="flex items-start">✅ <span class="ml-2">手数料がかからない（直接契約）</span></li>
+                        <li class="flex items-start">⚠️ <span class="ml-2">プロフィールの作り込みが必須</span></li>
+                    </ul>
+                    <button class="w-full py-2 bg-stone-100 hover:bg-stone-200 text-slate-700 rounded transition" onclick="showTip('linkedin')">攻略のヒント</button>
+                </div>
+
+                <!-- Japan Entry Niche Card -->
+                <div class="card p-6 border-t-4 border-red-500 bg-red-50">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-xl font-bold text-slate-800">Japan Entry</h3>
+                        <span class="text-2xl">🇯🇵</span>
+                    </div>
+                    <p class="text-sm text-slate-600 mb-4 h-16">「日本市場に進出したい」海外企業をターゲットにする最強のニッチ戦略。</p>
+                    <ul class="text-sm space-y-2 mb-6 text-slate-600">
+                        <li class="flex items-start">✅ <span class="ml-2">競合が劇的に減る</span></li>
+                        <li class="flex items-start">✅ <span class="ml-2">「日本人であること」が価値になる</span></li>
+                        <li class="flex items-start">💡 <span class="ml-2">キーワード: "Japan Market Entry"</span></li>
+                    </ul>
+                    <button class="w-full py-2 bg-white hover:bg-red-100 text-red-700 border border-red-200 rounded transition" onclick="showTip('niche')">検索キーワード例</button>
+                </div>
+            </div>
+
+            <!-- Dynamic Tip Box -->
+            <div id="tip-box" class="hidden bg-teal-50 border border-teal-200 rounded-lg p-6 animate-fade-in">
+                <h4 id="tip-title" class="font-bold text-teal-800 mb-2"></h4>
+                <p id="tip-content" class="text-teal-700 text-sm"></p>
+            </div>
+        </section>
+
+        <!-- SECTION 3: Communication & Workflow -->
+        <section id="communication" class="scroll-mt-24">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-slate-800 mb-2">3. コミュニケーション・ディフェンス</h2>
+                <p class="text-slate-600">
+                    英語力不足は「仕組み」でカバーします。テキストベースのコミュニケーションに持ち込み、翻訳ツール(DeepL/ChatGPT)をフル活用する環境を整えましょう。
+                </p>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm border border-stone-200 overflow-hidden">
+                <div class="flex border-b border-stone-200 overflow-x-auto">
+                    <button onclick="switchTab('phase1')" class="comms-tab px-6 py-4 text-sm font-bold text-teal-600 border-b-2 border-teal-600 bg-teal-50 whitespace-nowrap" id="tab-phase1">1. 提案・応募</button>
+                    <button onclick="switchTab('phase2')" class="comms-tab px-6 py-4 text-sm font-medium text-slate-500 hover:text-slate-700 whitespace-nowrap" id="tab-phase2">2. キックオフ</button>
+                    <button onclick="switchTab('phase3')" class="comms-tab px-6 py-4 text-sm font-medium text-slate-500 hover:text-slate-700 whitespace-nowrap" id="tab-phase3">3. 報告・納品</button>
+                </div>
+
+                <div class="p-6 min-h-[200px]">
+                    <!-- Phase 1 Content -->
+                    <div id="content-phase1" class="tab-content block">
+                        <h4 class="font-bold text-slate-800 mb-3">不安を取り除く「魔法の一文」</h4>
+                        <p class="text-sm text-slate-600 mb-4">
+                            最初のメッセージで、自分の英語レベルと専門性を正直かつポジティブに伝えます。
+                        </p>
+                        <div class="bg-stone-100 p-4 rounded border border-stone-200 font-mono text-sm text-slate-700 relative group">
+                            <p>"I am a native Japanese speaker with 5 years of experience in Digital Marketing. While my spoken English is conversational, I am highly proficient in reading and writing, and I let my data analysis results speak for themselves."</p>
+                            <button class="absolute top-2 right-2 text-xs bg-white border border-stone-300 px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition" onclick="copyToClipboard(this)">Copy</button>
+                        </div>
+                        <p class="mt-4 text-xs text-slate-500">ポイント： 「英語は完璧ではないが、仕事（数字）は完璧だ」というスタンスを示す。</p>
+                    </div>
+
+                    <!-- Phase 2 Content -->
+                    <div id="content-phase2" class="tab-content hidden">
+                        <h4 class="font-bold text-slate-800 mb-3">Zoom会議を回避するテクニック</h4>
+                        <p class="text-sm text-slate-600 mb-4">
+                            時差と言語の壁を理由に、非同期（テキスト）コミュニケーションを提案します。
+                        </p>
+                        <div class="bg-stone-100 p-4 rounded border border-stone-200 font-mono text-sm text-slate-700 relative group">
+                            <p>"Given the time difference and to ensure accuracy in technical details, I prefer to communicate primarily via text (Slack/Email). This allows me to provide you with precise updates and recorded data."</p>
+                            <button class="absolute top-2 right-2 text-xs bg-white border border-stone-300 px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition" onclick="copyToClipboard(this)">Copy</button>
+                        </div>
+                    </div>
+
+                    <!-- Phase 3 Content -->
+                    <div id="content-phase3" class="tab-content hidden">
+                        <h4 class="font-bold text-slate-800 mb-3">数字で語るレポート</h4>
+                        <p class="text-sm text-slate-600 mb-4">
+                            Web広告・データ分析の強みは、結果が数字で出る点です。冗長な説明よりも、明確なグラフとKPIの推移を提出します。
+                        </p>
+                        <ul class="list-disc list-inside text-sm text-slate-600 space-y-1">
+                            <li>Looker StudioなどのBIツールで自動更新ダッシュボードを作成し、URLを共有する。</li>
+                            <li>"Good trend" "Need improvement" など、短い単語で状況をタグ付けする。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: Income Simulation -->
+        <section id="simulation" class="scroll-mt-24 pb-12">
+             <div class="mb-8">
+                <h2 class="text-3xl font-bold text-slate-800 mb-2">4. 収益シミュレーション</h2>
+                <p class="text-slate-600">
+                    海外案件の最大の魅力は、通貨価値の差（円安メリット）と、専門職への高い報酬水準です。
+                </p>
+            </div>
+
+            <div class="bg-teal-900 rounded-3xl p-8 text-white shadow-xl">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <!-- Inputs -->
+                    <div class="space-y-8">
+                        <div>
+                            <label class="block text-teal-200 text-sm font-semibold mb-2">想定時給 (USD)</label>
+                            <div class="flex items-center gap-4">
+                                <span class="text-2xl font-bold w-16">$<span id="rate-display">40</span></span>
+                                <input type="range" id="rate-slider" min="15" max="150" value="40" step="5" class="w-full h-2 bg-teal-700 rounded-lg appearance-none cursor-pointer">
+                            </div>
+                            <p class="text-xs text-teal-300 mt-1">目安: 初心者 $20~ / 中級 $40~ / 専門家 $80~</p>
+                        </div>
+
+                        <div>
+                            <label class="block text-teal-200 text-sm font-semibold mb-2">月間稼働時間 (Hours)</label>
+                            <div class="flex items-center gap-4">
+                                <span class="text-2xl font-bold w-16"><span id="hours-display">60</span>h</span>
+                                <input type="range" id="hours-slider" min="10" max="160" value="60" step="10" class="w-full h-2 bg-teal-700 rounded-lg appearance-none cursor-pointer">
+                            </div>
+                            <p class="text-xs text-teal-300 mt-1">副業なら20h~ / フリーランスなら80h~</p>
+                        </div>
+
+                        <div>
+                             <label class="block text-teal-200 text-sm font-semibold mb-2">為替レート (USD/JPY)</label>
+                             <div class="flex items-center gap-4">
+                                 <input type="number" id="exchange-input" value="150" class="bg-teal-800 border border-teal-600 text-white rounded px-3 py-1 w-24 text-center">
+                                 <span class="text-sm">円</span>
+                             </div>
+                        </div>
+                    </div>
+
+                    <!-- Result -->
+                    <div class="flex flex-col justify-center items-center bg-teal-800/50 rounded-2xl p-6 border border-teal-700/50">
+                        <h3 class="text-teal-200 font-medium mb-2">月間想定収益</h3>
+                        <div class="text-5xl font-bold mb-2">
+                            ¥<span id="total-jpy">360,000</span>
+                        </div>
+                        <div class="text-xl text-teal-300 opacity-80">
+                            ($<span id="total-usd">2,400</span>)
+                        </div>
+                        <div class="mt-8 p-4 bg-teal-900/80 rounded-lg text-sm text-teal-100 leading-relaxed max-w-sm">
+                            <p>
+                                💡 日本国内案件で時給2,000円の場合、同じ60時間で<span class="font-bold">120,000円</span>。<br>
+                                海外案件に切り替えるだけで、収益は<span class="font-bold text-yellow-300">約3倍</span>になります。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="text-center pt-8 pb-12 border-t border-stone-200">
+            <p class="text-slate-500 mb-4">Global Freelance Strategy for Japanese Marketers</p>
+            <button onclick="window.scrollTo({top:0, behavior:'smooth'})" class="text-teal-600 hover:text-teal-800 font-semibold text-sm">
+                ↑ トップに戻る
+            </button>
+        </footer>
+
+    </main>
+
+    <script>
+        // --- 1. Navigation Logic ---
+        function scrollToSection(id) {
+            const element = document.getElementById(id);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // --- 2. Chart.js Implementation ---
+        document.addEventListener('DOMContentLoaded', function() {
+            // Chart 1: Skill Suitability Matrix (Scatter)
+            const ctxMatrix = document.getElementById('skillMatrixChart').getContext('2d');
+            new Chart(ctxMatrix, {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        label: 'Marketing Skills',
+                        data: [
+                            { x: 20, y: 80, label: 'Data Analysis', r: 12 },   // Low English, High Rate
+                            { x: 30, y: 75, label: 'Web Ads (PPC)', r: 12 },   // Low English, High Rate
+                            { x: 40, y: 60, label: 'Technical SEO', r: 10 },
+                            { x: 80, y: 50, label: 'Content Writing', r: 8 },  // High English, Mid Rate
+                            { x: 90, y: 40, label: 'Social Media Mgmt', r: 8 },
+                            { x: 50, y: 20, label: 'Data Entry', r: 6 }
+                        ],
+                        backgroundColor: function(context) {
+                            const val = context.raw;
+                            // Highlight the sweet spot (Low English < 40, High Rate > 60)
+                            if (val && val.x < 45 && val.y > 65) {
+                                return '#0f766e'; // Teal
+                            }
+                            return '#94a3b8'; // Slate
+                        }
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.raw.label;
+                                }
+                            }
+                        },
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: {
+                            title: { display: true, text: '英語力の必要性 (English Requirement)' },
+                            min: 0, max: 100,
+                            grid: { color: '#e5e7eb' }
+                        },
+                        y: {
+                            title: { display: true, text: '市場単価 / 需要 (Market Rate/Demand)' },
+                            min: 0, max: 100,
+                            grid: { color: '#e5e7eb' }
+                        }
+                    }
+                }
+            });
+
+            // Chart 2: Client Priority (Bar)
+            const ctxPriority = document.getElementById('clientPriorityChart').getContext('2d');
+            new Chart(ctxPriority, {
+                type: 'bar',
+                data: {
+                    labels: ['専門スキル (Results)', '日本市場知識 (Niche)', 'レスポンス速度 (Trust)', '流暢な英語 (Language)'],
+                    datasets: [{
+                        label: 'Importance Score',
+                        data: [95, 90, 80, 40],
+                        backgroundColor: ['#0f766e', '#0d9488', '#2dd4bf', '#cbd5e1'],
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y', // Horizontal bar chart
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            max: 100,
+                            grid: { display: false }
+                        },
+                        y: {
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        });
+
+        // --- 3. Dynamic Tips Logic ---
+        const tips = {
+            'upwork': {
+                title: 'Upwork攻略の鍵',
+                content: '最初は低単価でも「★5評価」を3つ貯めることに集中してください。プロフィール文は「I help you...」から始め、自分のスキルではなく「クライアントが得られる利益」を強調します。ポートフォリオにはGoogle Analyticsや広告管理画面のスクリーンショット（数字部分）を掲載しましょう。'
+            },
+            'linkedin': {
+                title: 'LinkedInプロフィールの極意',
+                content: 'ヘッドライン（名前の下）を職種だけにせず、「Digital Marketer specializing in Japan Market Entry」と具体的に書きましょう。"Open to work"フレームを使用し、"About"セクションでは過去の実績を箇条書きで数字と共に記載します。'
+            },
+            'niche': {
+                title: 'Japan Entry ニッチ検索',
+                content: '検索窓で以下のキーワードを試してください："Japan Market", "Japanese Native", "Japan Expansion", "PPC Japan", "SEO Japan"。これらを含む案件は、競合が日本人だけになるため、勝率が格段に上がります。'
+            }
+        };
+
+        function showTip(key) {
+            const box = document.getElementById('tip-box');
+            const title = document.getElementById('tip-title');
+            const content = document.getElementById('tip-content');
+            
+            // Animation reset
+            box.classList.remove('hidden');
+            box.style.opacity = '0';
+            setTimeout(() => {
+                title.textContent = tips[key].title;
+                content.textContent = tips[key].content;
+                box.style.opacity = '1';
+                box.style.transition = 'opacity 0.3s ease';
+            }, 50);
+        }
+
+        // --- 4. Tab Switching Logic ---
+        function switchTab(phase) {
+            // Hide all content
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('block'));
+            
+            // Show selected content
+            document.getElementById('content-' + phase).classList.remove('hidden');
+            document.getElementById('content-' + phase).classList.add('block');
+
+            // Update tab styles
+            document.querySelectorAll('.comms-tab').forEach(el => {
+                el.classList.remove('border-b-2', 'border-teal-600', 'bg-teal-50', 'text-teal-600', 'font-bold');
+                el.classList.add('text-slate-500', 'font-medium');
+            });
+            
+            const activeTab = document.getElementById('tab-' + phase);
+            activeTab.classList.remove('text-slate-500', 'font-medium');
+            activeTab.classList.add('border-b-2', 'border-teal-600', 'bg-teal-50', 'text-teal-600', 'font-bold');
+        }
+
+        // --- 5. Clipboard Logic ---
+        function copyToClipboard(btn) {
+            const text = btn.previousElementSibling.textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = btn.textContent;
+                btn.textContent = 'Copied!';
+                btn.classList.add('bg-teal-100', 'text-teal-700');
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.classList.remove('bg-teal-100', 'text-teal-700');
+                }, 2000);
+            });
+        }
+
+        // --- 6. Income Simulator Logic ---
+        const rateSlider = document.getElementById('rate-slider');
+        const hoursSlider = document.getElementById('hours-slider');
+        const exchangeInput = document.getElementById('exchange-input');
+        
+        const rateDisplay = document.getElementById('rate-display');
+        const hoursDisplay = document.getElementById('hours-display');
+        const totalJpyDisplay = document.getElementById('total-jpy');
+        const totalUsdDisplay = document.getElementById('total-usd');
+
+        function calculate() {
+            const rate = parseInt(rateSlider.value);
+            const hours = parseInt(hoursSlider.value);
+            const exchange = parseInt(exchangeInput.value);
+
+            rateDisplay.textContent = rate;
+            hoursDisplay.textContent = hours;
+
+            const totalUsd = rate * hours;
+            const totalJpy = totalUsd * exchange;
+
+            totalUsdDisplay.textContent = totalUsd.toLocaleString();
+            totalJpyDisplay.textContent = totalJpy.toLocaleString();
+        }
+
+        rateSlider.addEventListener('input', calculate);
+        hoursSlider.addEventListener('input', calculate);
+        exchangeInput.addEventListener('input', calculate);
+
+    </script>
+</body>
+</html>
